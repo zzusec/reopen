@@ -30,6 +30,7 @@ const (
 	helpAction
 	quitAction
 	resumeAction
+	groupAction
 
 	// Keys that need no footer entry.
 	searchBackAction
@@ -69,6 +70,7 @@ var bindings = []binding{
 	{keys: []string{"!"}, action: dangerAction, label: i18n.BindingDanger},
 	{keys: []string{"/"}, action: searchAction, label: i18n.BindingSearch},
 	{keys: []string{"r"}, action: reloadAction, label: i18n.BindingReload},
+	{keys: []string{"p"}, action: groupAction, label: i18n.BindingGroup},
 	{keys: []string{"h"}, action: helpAction, label: i18n.BindingHelp},
 	{keys: []string{"q", "ctrl+c"}, action: quitAction, label: i18n.BindingQuit},
 
@@ -94,7 +96,7 @@ var (
 		sweepArchivedAction, sweepEmptyAction, sweepOrphansAction, dangerAction,
 	}
 	footerBottom = []action{
-		resumeAction, pickAction, searchAction, reloadAction, helpAction, quitAction,
+		resumeAction, pickAction, searchAction, reloadAction, groupAction, helpAction, quitAction,
 	}
 )
 

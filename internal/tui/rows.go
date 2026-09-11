@@ -58,6 +58,12 @@ func (m *Model) banner() string {
 	}
 	line.Add(strings.Join(counts, " · "), m.theme.Muted)
 
+	// The project view is how the list is arranged rather than what the keys
+	// are about, so it sits with the counts rather than with the modes.
+	if m.view == viewProject {
+		line.Space(3).Add(m.print.T(i18n.BannerByProject), m.theme.Muted)
+	}
+
 	// A mode changes what the keys do, which has to be impossible to miss.
 	switch {
 	case m.danger:
@@ -86,10 +92,18 @@ func (m *Model) listLines(width, height int) []string {
 		return []string{m.theme.Placeholder.Render(m.print.T(i18n.NoSessionsHere))}
 	}
 
+	// The leftmost column is a group label either way: the day in the timeline
+	// view, the project in the project view. Whichever one is shown sizes the
+	// column, since only one is ever drawn.
 	today := time.Now()
-	days := m.dayLabels(today)
+	var labels []string
+	if m.view == viewProject {
+		labels = m.projectHeaders()
+	} else {
+		labels = m.dayLabels(today)
+	}
 	dayWidth := dayMinWidth
-	for _, label := range days {
+	for _, label := range labels {
 		dayWidth = max(dayWidth, text.Width(label))
 	}
 	projectWidth := projectMinWidth
@@ -103,7 +117,7 @@ func (m *Model) listLines(width, height int) []string {
 
 	lines := make([]string, 0, height)
 	for i := m.top; i < len(m.rows) && len(lines) < height; i++ {
-		lines = append(lines, m.rowLine(i, days[i], dayWidth, projectWidth, width))
+		lines = append(lines, m.rowLine(i, labels[i], dayWidth, projectWidth, width))
 	}
 	return lines
 }
@@ -129,6 +143,28 @@ func (m *Model) dayLabels(today time.Time) []string {
 		previous = day
 	}
 	return labels
+}
+
+// projectHeaders names the project on the first top-level row of each group,
+// the same way dayLabels names the day. The full working directory is the key,
+// so two projects that happen to share a basename are not run together.
+//
+// Only the top-level rows of a group carry the label: a sub-agent belongs to
+// the conversation above it and shares its directory, so repeating it would
+// only bury the tree.
+func (m *Model) projectHeaders() []string {
+	headers := make([]string, len(m.rows))
+	previous := ""
+	for i, row := range m.rows {
+		if row.Nested {
+			continue
+		}
+		if row.Session.Cwd != previous {
+			headers[i] = projectOf(row.Session)
+		}
+		previous = row.Session.Cwd
+	}
+	return headers
 }
 
 func dayLabel(print *i18n.Printer, when, today time.Time) string {
@@ -157,7 +193,7 @@ func daysApart(when, today time.Time) int {
 	return int(math.Round(noon(today).Sub(noon(when)).Hours() / 24))
 }
 
-func (m *Model) rowLine(index int, day string, dayWidth, projectWidth, width int) string {
+func (m *Model) rowLine(index int, label string, dayWidth, projectWidth, width int) string {
 	row := m.rows[index]
 	s := row.Session
 	cursor, picked := index == m.cursor, m.picked.Has(s.ID)
@@ -200,7 +236,7 @@ func (m *Model) rowLine(index int, day string, dayWidth, projectWidth, width int
 	if row.Nested {
 		line.Space(dayWidth + 1 + clockWidth + 2 + projectWidth + 1 + sizeWidth + 1)
 	} else {
-		line.Cell(day, dayWidth, shaded(m.theme.Day)).Space(1)
+		line.Cell(label, dayWidth, shaded(m.theme.Day)).Space(1)
 		line.Cell(s.RecencyAt().Format("15:04"), clockWidth, shaded(m.theme.Clock)).Space(2)
 		line.Cell(projectOf(s), projectWidth, shaded(m.theme.Project)).Space(1)
 		line.Cell(formatBytes(s.Size), sizeWidth, shaded(m.theme.Project)).Space(1)

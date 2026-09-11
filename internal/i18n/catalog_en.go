@@ -47,6 +47,7 @@ var english = map[Key]string{
 	BindingQuit:              "Quit",
 	BindingFocus:             "Switch focus",
 	BindingResume:            "Resume",
+	BindingGroup:             "By project",
 
 	HelpTitle:          "Keyboard shortcuts",
 	HelpClose:          "Press Esc, q, h, or Enter to close",
@@ -54,6 +55,7 @@ var english = map[Key]string{
 	HelpSelect:         "Move to the previous / next session",
 	HelpTopBottom:      "Jump to the top / bottom of the list",
 	HelpFocus:          "Switch between the session list and conversation",
+	HelpGroup:          "Group the list by project instead of time",
 	HelpSearch:         "Search sessions",
 	HelpSearchFields:   "Search titles, working directories, session IDs, and clients",
 	HelpSearchReverse:  "Search backward",
@@ -106,6 +108,7 @@ var english = map[Key]string{
 	BannerSelectedOne:  "◆ 1 selected",
 	BannerSelectedMany: "◆ {count} selected",
 	BannerDanger:       "⚠ Danger mode",
+	BannerByProject:    "by project",
 
 	NoConversation:       "No messages in this session.",
 	ArchivedMarker:       "◆ Archived",

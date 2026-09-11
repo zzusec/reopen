@@ -41,6 +41,15 @@ const (
 	focusDetail
 )
 
+// viewMode is how the session list is ordered. The default is a flat timeline
+// newest first; the project view gathers sessions by working directory instead.
+type viewMode uint8
+
+const (
+	viewTime viewMode = iota
+	viewProject
+)
+
 var _ tea.Model = (*Model)(nil)
 
 type Model struct {
@@ -56,12 +65,14 @@ type Model struct {
 	width, height int
 
 	// The listing, arranged as a forest, and where the cursor stands in it.
-	forest *session.Forest
-	rows   []session.Row
-	cursor int
-	top    int // first visible row, so the cursor stays on screen
-	picked session.Selection
+	forest      *session.Forest
+	rawSessions []session.Session // the raw listing, reordered per view below
+	rows        []session.Row
+	cursor      int
+	top         int // first visible row, so the cursor stays on screen
+	picked      session.Selection
 
+	view  viewMode
 	focus focusTarget
 	// clicked remembers the last row a click landed on, so a timely second
 	// click can pick it, the way Space does.
@@ -274,6 +285,8 @@ func (m *Model) command(a action) tea.Cmd {
 		m.help = true
 	case reloadAction:
 		return m.reload()
+	case groupAction:
+		return m.toggleGroup()
 	case quitAction:
 		return m.quit()
 	case resumeAction:
@@ -368,6 +381,54 @@ func (m *Model) resumeSession() tea.Cmd {
 // resumeWanted being false.
 func (m *Model) Resume() (session.Session, bool) {
 	return m.resume, m.resumeWanted
+}
+
+// toggleGroup flips between a flat timeline and one gathered by project. The
+// raw listing never changes — only the order it is laid out in — so the two
+// views show the same sessions, and Build re-nests every sub-agent under the
+// conversation that spawned it either way.
+func (m *Model) toggleGroup() tea.Cmd {
+	if len(m.rawSessions) == 0 {
+		return nil
+	}
+	if m.view == viewTime {
+		m.view = viewProject
+	} else {
+		m.view = viewTime
+	}
+
+	// Keep the cursor on the session it is on, so flipping the view does not
+	// fling the reader somewhere else in the list.
+	focus := ""
+	if m.cursor < len(m.rows) {
+		focus = m.rows[m.cursor].Session.ID
+	}
+	m.layout()
+	if focus != "" {
+		for i, row := range m.rows {
+			if row.Session.ID == focus {
+				m.cursor = i
+				break
+			}
+		}
+	}
+	m.cursor = max(0, min(m.cursor, len(m.rows)-1))
+	m.clampView()
+	return m.showCurrent()
+}
+
+// layout lays the raw listing out for the current view: time-ordered as the
+// agents handed it back, or gathered by working directory. The rows and the
+// forest are replaced in step, since every index into the list is an index into
+// the rows.
+func (m *Model) layout() {
+	ordered := m.rawSessions
+	if m.view == viewProject {
+		ordered = session.GroupByProject(ordered)
+	}
+	m.forest = session.Build(ordered)
+	m.rows = m.forest.Rows()
+	m.picked.Retain(m.forest)
 }
 
 func (m *Model) toggleDanger() tea.Cmd {

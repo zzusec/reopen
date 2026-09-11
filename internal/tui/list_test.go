@@ -425,6 +425,152 @@ func TestFooterHeightSurvivesASelection(t *testing.T) {
 	}
 }
 
+// The project view gathers a listing by working directory, so two projects that
+// the timeline interleaves sit together instead. The header takes the column
+// the day label had, shown once at the start of each group.
+func TestProjectViewGroupsByDirectory(t *testing.T) {
+	t.Parallel()
+
+	// Two projects, interleaved newest first so grouping has something to do.
+	// Times are all "yesterday" at different hours, so the timeline view prints
+	// the day label only once and the project view prints each directory once.
+	day := time.Now().AddDate(0, 0, -1)
+	when := func(hour int) time.Time {
+		return time.Date(day.Year(), day.Month(), day.Day(), hour, 0, 0, 0, time.Local)
+	}
+	sessions := []session.Session{
+		{ID: "a1", Title: "a1", Cwd: "/work/app", CreatedAt: when(12)},
+		{ID: "l1", Title: "l1", Cwd: "/work/lib", CreatedAt: when(11)},
+		{ID: "a2", Title: "a2", Cwd: "/work/app", CreatedAt: when(10)},
+		{ID: "l2", Title: "l2", Cwd: "/work/lib", CreatedAt: when(9)},
+	}
+
+	m := start(t, newFake(sessions...))
+	// The timeline view is the default, and prints the day label once.
+	if strings.Count(screen(m), "Yesterday") != 1 {
+		t.Errorf("timeline view did not label the day once:\n%s", screen(m))
+	}
+
+	press(t, m, "p")
+	if m.view != viewProject {
+		t.Fatalf("p did not switch to the project view, view = %d", m.view)
+	}
+
+	// The project header occupies the leftmost column (the one the day label
+	// had) at the head of each group and is blank underneath. The project
+	// column next to it names every row's directory, so counting headers means
+	// reading the header column rather than scanning the whole line.
+	headers := m.projectHeaders()
+	want := map[string]string{"a1": "app", "a2": "", "l1": "lib", "l2": ""}
+	for i, r := range m.rows {
+		if r.Nested {
+			continue
+		}
+		if headers[i] != want[r.Session.ID] {
+			t.Errorf("header for %s = %q, want %q", r.Session.ID, headers[i], want[r.Session.ID])
+		}
+	}
+	// The banner says how the list is arranged.
+	if !strings.Contains(screen(m), "by project") {
+		t.Errorf("the banner did not announce the project view:\n%s", screen(m))
+	}
+
+	// The rows are now contiguous by directory.
+	got := []string{
+		m.rows[0].Session.ID, m.rows[1].Session.ID,
+		m.rows[2].Session.ID, m.rows[3].Session.ID,
+	}
+	if want := []string{"a1", "a2", "l1", "l2"}; strings.Join(got, ",") != strings.Join(want, ",") {
+		t.Errorf("project view order = %v, want %v", got, want)
+	}
+
+	// A second p returns to the timeline.
+	press(t, m, "p")
+	if m.view != viewTime {
+		t.Errorf("a second p did not return to the timeline, view = %d", m.view)
+	}
+}
+
+// Flipping the view keeps the cursor on the same session, so the reader does not
+// lose their place by rearranging the list.
+func TestProjectViewKeepsTheCursorOnItsSession(t *testing.T) {
+	t.Parallel()
+
+	sessions := []session.Session{
+		{ID: "a", Title: "a", Cwd: "/work/app"},
+		{ID: "l", Title: "l", Cwd: "/work/lib"},
+	}
+	m := start(t, newFake(sessions...))
+	press(t, m, "j") // onto "l"
+	before := m.rows[m.cursor].Session.ID
+
+	press(t, m, "p")
+	if got := m.rows[m.cursor].Session.ID; got != before {
+		t.Errorf("after switching views the cursor sits on %q, want %q", got, before)
+	}
+}
+
+// The project header is a label painted onto a real row, not a row of its own,
+// so clicking and picking work exactly as they do in the timeline.
+func TestProjectViewClicksAndPicksRows(t *testing.T) {
+	t.Parallel()
+
+	m := start(t, newFake(tree()...))
+	press(t, m, "p") // every tree session shares /work/app except "other"
+	click(t, m, 1, bannerHeight)
+	// No crash, and the cursor sits on a real session row, not a header ghost.
+	if m.cursor < 0 || m.cursor >= len(m.rows) {
+		t.Fatalf("cursor = %d is off the list", m.cursor)
+	}
+	press(t, m, "space")
+	if m.picked.Empty() {
+		t.Error("space did not pick the row under the cursor in the project view")
+	}
+}
+
+// A sub-agent shares its parent's directory, so the project header is printed
+// on the conversation that heads the group and left off the rows beneath it —
+// the same way the day label is.
+func TestProjectViewLeavesSubAgentsUnlabelled(t *testing.T) {
+	t.Parallel()
+
+	m := start(t, newFake(tree()...))
+	press(t, m, "p")
+
+	// The tree has two projects (/work/app for the family, /work/lib for
+	// "other"), so each gets exactly one header on its first top-level row and
+	// none on the nested sub-agents beneath it.
+	headers := m.projectHeaders()
+	nonEmpty := 0
+	for _, h := range headers {
+		if h != "" {
+			nonEmpty++
+		}
+	}
+	if nonEmpty != 2 {
+		t.Errorf("the project header appeared on %d rows, want 2 (one per project)", nonEmpty)
+	}
+	for _, r := range m.rows {
+		if r.Nested && headers[indexByTitle(m, r.Session.ID)] != "" {
+			t.Errorf("a nested sub-agent row %q carried a project header", r.Session.ID)
+		}
+	}
+	// "other" heads the lib group, so it carries the lib header.
+	other := headers[indexByTitle(m, "other")]
+	if other != "lib" {
+		t.Errorf("the lib group header = %q, want %q", other, "lib")
+	}
+}
+
+func indexByTitle(m *Model, id string) int {
+	for i, r := range m.rows {
+		if r.Session.ID == id {
+			return i
+		}
+	}
+	return -1
+}
+
 func TestDayLabels(t *testing.T) {
 	t.Parallel()
 

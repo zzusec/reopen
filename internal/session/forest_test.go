@@ -334,6 +334,96 @@ func TestForestBranches(t *testing.T) {
 	})
 }
 
+// cwd builds a session whose identity for grouping is its working directory.
+func cwd(id, dir string) session.Session {
+	return session.Session{ID: id, Title: id, Cwd: dir}
+}
+
+func TestGroupByProject(t *testing.T) {
+	t.Parallel()
+
+	t.Run("sessions sharing a directory sit together", func(t *testing.T) {
+		t.Parallel()
+		// Arrived newest first, with two projects interleaved.
+		got := ids(session.GroupByProject([]session.Session{
+			cwd("a1", "/work/app"), cwd("l1", "/work/lib"),
+			cwd("a2", "/work/app"), cwd("l2", "/work/lib"),
+		}))
+		// Each directory's sessions are contiguous, the group order is the order
+		// of first appearance, and each group keeps its arrival order.
+		if got != "a1,a2,l1,l2" {
+			t.Errorf("GroupByProject = %s, want a1,a2,l1,l2", got)
+		}
+	})
+
+	t.Run("the most recently active project lands on top", func(t *testing.T) {
+		t.Parallel()
+		// lib appears before app because its newest session came first.
+		got := ids(session.GroupByProject([]session.Session{
+			cwd("lib-new", "/work/lib"), cwd("app-new", "/work/app"),
+			cwd("app-old", "/work/app"), cwd("lib-old", "/work/lib"),
+		}))
+		if got != "lib-new,lib-old,app-new,app-old" {
+			t.Errorf("GroupByProject = %s, want lib first, then app", got)
+		}
+	})
+
+	t.Run("sessions with no working directory share one group", func(t *testing.T) {
+		t.Parallel()
+		got := ids(session.GroupByProject([]session.Session{
+			cwd("blank1", ""), cwd("a", "/work/app"), cwd("blank2", ""),
+		}))
+		// Empty Cwds collected together at their first-appearance position.
+		if got != "blank1,blank2,a" {
+			t.Errorf("GroupByProject = %s, want blank1,blank2,a", got)
+		}
+	})
+
+	t.Run("two directories with the same basename stay separate", func(t *testing.T) {
+		t.Parallel()
+		got := ids(session.GroupByProject([]session.Session{
+			cwd("one", "/x/app"), cwd("two", "/y/app"),
+		}))
+		// The full path is the key, so these are not merged.
+		if got != "one,two" {
+			t.Errorf("GroupByProject = %s, want one,two", got)
+		}
+	})
+
+	t.Run("an empty listing stays empty", func(t *testing.T) {
+		t.Parallel()
+		if got := session.GroupByProject(nil); len(got) != 0 {
+			t.Errorf("GroupByProject(nil) = %v, want empty", got)
+		}
+	})
+
+	t.Run("grouped roots still re-nest under their parent", func(t *testing.T) {
+		t.Parallel()
+		// Two projects, each with a sub-agent. Reordering the flat list must not
+		// pull a sub-agent away from the conversation that spawned it.
+		sessions := []session.Session{
+			node("rootA", ""), node("childA", "rootA"),
+			node("rootB", ""), node("childB", "rootB"),
+		}
+		sessions[0].Cwd = "/work/app"
+		sessions[1].Cwd = "/work/app"
+		sessions[2].Cwd = "/work/lib"
+		sessions[3].Cwd = "/work/lib"
+
+		// Put a lib session first so grouping has to reorder the roots.
+		reordered := session.GroupByProject([]session.Session{
+			sessions[2], sessions[0], sessions[3], sessions[1],
+		})
+		f := session.Build(reordered)
+
+		// rootB comes first because lib appeared first, and its child still
+		// nests under it rather than drifting off after the reorder.
+		if got := shape(f); got != "rootB\nL-childB\nrootA\nL-childA" {
+			t.Errorf("after grouping:\n%s\nwant rootB and its child before rootA's", got)
+		}
+	})
+}
+
 func describe(branches [][]session.Session) string {
 	parts := make([]string, len(branches))
 	for i, branch := range branches {

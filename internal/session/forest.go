@@ -385,3 +385,35 @@ func SortByRecency(sessions []Session) {
 		return a.After(b)
 	})
 }
+
+// GroupByProject reorders a listing so the sessions that ran in the same working
+// directory sit together, the way SortByRecency leaves every day's work spread
+// across the whole list.
+//
+// Only the flat order changes. The groups keep the order of their first
+// appearance, so a listing that arrived newest first puts the most recently
+// active project on top; each group keeps the order it arrived in, so the same
+// listing stays newest first within the group. Build re-nests every sub-agent
+// under the session that spawned it whatever order it arrives in, so reordering
+// never separates a conversation from its tree — it only gathers roots that
+// share a directory.
+//
+// The full working directory is the key, not its last segment: two projects can
+// share a basename without being the same project.
+func GroupByProject(sessions []Session) []Session {
+	seen := make(map[string]bool)
+	var order []string
+	buckets := make(map[string][]Session)
+	for _, s := range sessions {
+		if !seen[s.Cwd] {
+			seen[s.Cwd] = true
+			order = append(order, s.Cwd)
+		}
+		buckets[s.Cwd] = append(buckets[s.Cwd], s)
+	}
+	out := make([]Session, 0, len(sessions))
+	for _, cwd := range order {
+		out = append(out, buckets[cwd]...)
+	}
+	return out
+}

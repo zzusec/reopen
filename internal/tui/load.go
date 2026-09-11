@@ -67,12 +67,9 @@ func (m *Model) loaded(msg loadedMsg) tea.Cmd {
 
 	// Nothing is ever filtered out: a session you cannot see is one you cannot
 	// decide about, and an archived row already says what it is.
-	m.forest = session.Build(msg.sessions)
-	m.rows = m.forest.Rows()
+	m.rawSessions = msg.sessions
+	m.layout()
 	m.endMouseSequences()
-	// Whatever has been deleted since the selection was made is no longer
-	// selectable, and would otherwise keep multi-select on with nothing in it.
-	m.picked.Retain(m.forest)
 
 	m.cursor = msg.request.index
 	if msg.request.focusID != "" {

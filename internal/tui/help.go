@@ -24,6 +24,7 @@ var helpSections = []helpSection{
 	{name: i18n.HelpBrowse, entries: []helpEntry{
 		{keys: "↑ ↓ / j k", what: i18n.HelpSelect},
 		{keys: "g / G", what: i18n.HelpTopBottom},
+		{keys: "p", what: i18n.HelpGroup},
 		{keys: "Tab", what: i18n.HelpFocus},
 	}},
 	{name: i18n.HelpSearch, entries: []helpEntry{

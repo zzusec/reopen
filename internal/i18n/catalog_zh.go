@@ -47,6 +47,7 @@ var chinese = map[Key]string{
 	BindingQuit:              "退出",
 	BindingFocus:             "切换焦点",
 	BindingResume:            "恢复会话",
+	BindingGroup:             "按项目分组",
 
 	HelpTitle:          "按键说明",
 	HelpClose:          "按 Esc、q、h 或 Enter 关闭",
@@ -54,6 +55,7 @@ var chinese = map[Key]string{
 	HelpSelect:         "移到上一条 / 下一条会话",
 	HelpTopBottom:      "跳到列表顶部 / 底部",
 	HelpFocus:          "在会话列表和对话详情之间切换",
+	HelpGroup:          "把列表按项目分组，而非按时间",
 	HelpSearch:         "搜索会话",
 	HelpSearchFields:   "搜索标题、工作目录、会话 ID 和客户端",
 	HelpSearchReverse:  "反向搜索",
@@ -106,6 +108,7 @@ var chinese = map[Key]string{
 	BannerSelectedOne:  "◆ 已选 1 个会话",
 	BannerSelectedMany: "◆ 已选 {count} 个会话",
 	BannerDanger:       "⚠ 危险模式",
+	BannerByProject:    "按项目",
 
 	NoConversation:       "此会话暂无消息。",
 	ArchivedMarker:       "◆ 已归档",

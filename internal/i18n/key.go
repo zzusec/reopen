@@ -59,6 +59,7 @@ const (
 	BindingQuit
 	BindingFocus
 	BindingResume
+	BindingGroup
 
 	// The help screen.
 	HelpTitle
@@ -67,6 +68,7 @@ const (
 	HelpSelect
 	HelpTopBottom
 	HelpFocus
+	HelpGroup
 	HelpSearch
 	HelpSearchFields
 	HelpSearchReverse
@@ -121,6 +123,7 @@ const (
 	BannerSelectedOne
 	BannerSelectedMany
 	BannerDanger
+	BannerByProject
 
 	// The conversation pane.
 	NoConversation
