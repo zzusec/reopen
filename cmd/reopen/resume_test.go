@@ -3,8 +3,8 @@ package main
 import (
 	"testing"
 
-	"github.com/haowang02/agent-session-cleaner/internal/agent/claude"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/codex"
+	"github.com/zzusec/reopen/internal/agent/claude"
+	"github.com/zzusec/reopen/internal/agent/codex"
 )
 
 // TestResumeCommand pins the command line each agent expects when one of its

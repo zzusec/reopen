@@ -7,8 +7,8 @@ import (
 
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/haowang02/agent-session-cleaner/internal/tui/markdown"
-	"github.com/haowang02/agent-session-cleaner/internal/tui/theme"
+	"github.com/zzusec/reopen/internal/tui/markdown"
+	"github.com/zzusec/reopen/internal/tui/theme"
 )
 
 func renderer(t *testing.T, width int) *markdown.Renderer {

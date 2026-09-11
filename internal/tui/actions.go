@@ -5,9 +5,9 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/haowang02/agent-session-cleaner/internal/clip"
-	"github.com/haowang02/agent-session-cleaner/internal/i18n"
-	"github.com/haowang02/agent-session-cleaner/internal/session"
+	"github.com/zzusec/reopen/internal/clip"
+	"github.com/zzusec/reopen/internal/i18n"
+	"github.com/zzusec/reopen/internal/session"
 )
 
 // bulkPreviewLimit is how many titles a confirmation lists before collapsing

@@ -15,10 +15,10 @@ import (
 	"charm.land/bubbles/v2/viewport"
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/haowang02/agent-session-cleaner/internal/agent"
-	"github.com/haowang02/agent-session-cleaner/internal/i18n"
-	"github.com/haowang02/agent-session-cleaner/internal/session"
-	"github.com/haowang02/agent-session-cleaner/internal/tui/theme"
+	"github.com/zzusec/reopen/internal/agent"
+	"github.com/zzusec/reopen/internal/i18n"
+	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/reopen/internal/tui/theme"
 )
 
 type tone uint8

@@ -10,7 +10,7 @@ import (
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/haowang02/agent-session-cleaner/internal/session"
+	"github.com/zzusec/reopen/internal/session"
 )
 
 func TestConversationPane(t *testing.T) {

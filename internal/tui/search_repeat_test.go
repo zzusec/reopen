@@ -3,7 +3,7 @@ package tui
 import (
 	"testing"
 
-	"github.com/haowang02/agent-session-cleaner/internal/session"
+	"github.com/zzusec/reopen/internal/session"
 )
 
 // Repeated search must run the fetch command returned by the cursor jump.

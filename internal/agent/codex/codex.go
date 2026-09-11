@@ -24,11 +24,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/haowang02/agent-session-cleaner/internal/agent"
-	"github.com/haowang02/agent-session-cleaner/internal/execx"
-	"github.com/haowang02/agent-session-cleaner/internal/i18n"
-	"github.com/haowang02/agent-session-cleaner/internal/jsonl"
-	"github.com/haowang02/agent-session-cleaner/internal/session"
+	"github.com/zzusec/reopen/internal/agent"
+	"github.com/zzusec/reopen/internal/execx"
+	"github.com/zzusec/reopen/internal/i18n"
+	"github.com/zzusec/reopen/internal/jsonl"
+	"github.com/zzusec/reopen/internal/session"
 )
 
 // Identity and layout.

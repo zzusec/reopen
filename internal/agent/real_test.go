@@ -6,12 +6,12 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/haowang02/agent-session-cleaner/internal/agent"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/claude"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/codex"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/opencode"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/pi"
-	"github.com/haowang02/agent-session-cleaner/internal/session"
+	"github.com/zzusec/reopen/internal/agent"
+	"github.com/zzusec/reopen/internal/agent/claude"
+	"github.com/zzusec/reopen/internal/agent/codex"
+	"github.com/zzusec/reopen/internal/agent/opencode"
+	"github.com/zzusec/reopen/internal/agent/pi"
+	"github.com/zzusec/reopen/internal/session"
 )
 
 // These read the session trees on this machine, to prove the parsers cope with

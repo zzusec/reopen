@@ -7,7 +7,7 @@ import (
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/haowang02/agent-session-cleaner/internal/tui/text"
+	"github.com/zzusec/reopen/internal/tui/text"
 )
 
 func TestWidthCountsCells(t *testing.T) {

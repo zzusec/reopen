@@ -7,10 +7,10 @@ import (
 	"testing/fstest"
 	"time"
 
-	"github.com/haowang02/agent-session-cleaner/internal/agent"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/codex"
-	"github.com/haowang02/agent-session-cleaner/internal/execx"
-	"github.com/haowang02/agent-session-cleaner/internal/session"
+	"github.com/zzusec/reopen/internal/agent"
+	"github.com/zzusec/reopen/internal/agent/codex"
+	"github.com/zzusec/reopen/internal/execx"
+	"github.com/zzusec/reopen/internal/session"
 )
 
 // rollout assembles a transcript from its lines.

@@ -6,7 +6,7 @@ import (
 
 	"charm.land/glamour/v2/ansi"
 
-	"github.com/haowang02/agent-session-cleaner/internal/tui/theme"
+	"github.com/zzusec/reopen/internal/tui/theme"
 )
 
 // Glamour registers generated Chroma styles under one global name. Registering

@@ -118,8 +118,12 @@ func expand(template string, args Args) string {
 	return out.String()
 }
 
-// LanguageEnv is the variable that overrides locale detection.
-const LanguageEnv = "ASC_LANG"
+// LanguageEnv is the variable that overrides locale detection. ASC_LANG is
+// still honored for backwards compatibility with the upstream tool.
+const (
+	LanguageEnv    = "REOPEN_LANG"
+	languageEnvOld = "ASC_LANG"
+)
 
 // Detect picks a language from the environment. Pass os.Getenv; a stub keeps
 // tests independent of the machine they run on.
@@ -129,6 +133,9 @@ const LanguageEnv = "ASC_LANG"
 // locale means "not Chinese", and English is the better answer than guessing.
 func Detect(lookup func(string) string) string {
 	if lang := normalize(lookup(LanguageEnv)); lang != "" {
+		return lang
+	}
+	if lang := normalize(lookup(languageEnvOld)); lang != "" {
 		return lang
 	}
 	for _, name := range []string{"LC_ALL", "LC_MESSAGES", "LANGUAGE", "LANG"} {

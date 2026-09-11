@@ -2,7 +2,7 @@
 package buildinfo
 
 // Name is the program as it introduces itself on the command line.
-const Name = "agent-session-cleaner"
+const Name = "reopen"
 
 // Version is read by --version and checked against the release tag, so the
 // two can never drift apart.

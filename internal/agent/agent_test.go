@@ -4,11 +4,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/haowang02/agent-session-cleaner/internal/agent"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/claude"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/codex"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/opencode"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/pi"
+	"github.com/zzusec/reopen/internal/agent"
+	"github.com/zzusec/reopen/internal/agent/claude"
+	"github.com/zzusec/reopen/internal/agent/codex"
+	"github.com/zzusec/reopen/internal/agent/opencode"
+	"github.com/zzusec/reopen/internal/agent/pi"
 )
 
 // every agent this program knows about, so the next one cannot half-land.

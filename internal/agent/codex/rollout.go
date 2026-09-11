@@ -7,8 +7,8 @@ import (
 	"io"
 	"strings"
 
-	"github.com/haowang02/agent-session-cleaner/internal/jsonl"
-	"github.com/haowang02/agent-session-cleaner/internal/session"
+	"github.com/zzusec/reopen/internal/jsonl"
+	"github.com/zzusec/reopen/internal/session"
 )
 
 // titleScanLines bounds the search for an opening message. A conversation that

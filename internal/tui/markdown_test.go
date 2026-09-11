@@ -9,8 +9,8 @@ import (
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/haowang02/agent-session-cleaner/internal/i18n"
-	"github.com/haowang02/agent-session-cleaner/internal/session"
+	"github.com/zzusec/reopen/internal/i18n"
+	"github.com/zzusec/reopen/internal/session"
 )
 
 // talker is one session whose conversation is whatever a test needs to see

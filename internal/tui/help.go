@@ -3,7 +3,7 @@ package tui
 import (
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/haowang02/agent-session-cleaner/internal/i18n"
+	"github.com/zzusec/reopen/internal/i18n"
 )
 
 // helpEntry is one line of the help screen. A gated entry appears only where

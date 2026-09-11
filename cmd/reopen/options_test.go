@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/haowang02/agent-session-cleaner/internal/agent"
-	"github.com/haowang02/agent-session-cleaner/internal/buildinfo"
-	"github.com/haowang02/agent-session-cleaner/internal/i18n"
+	"github.com/zzusec/reopen/internal/agent"
+	"github.com/zzusec/reopen/internal/buildinfo"
+	"github.com/zzusec/reopen/internal/i18n"
 )
 
 func TestParse(t *testing.T) {

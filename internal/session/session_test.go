@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/haowang02/agent-session-cleaner/internal/session"
+	"github.com/zzusec/reopen/internal/session"
 )
 
 func TestRecencyAtPrefersRecordedStart(t *testing.T) {

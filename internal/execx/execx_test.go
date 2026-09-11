@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/haowang02/agent-session-cleaner/internal/execx"
-	"github.com/haowang02/agent-session-cleaner/internal/i18n"
+	"github.com/zzusec/reopen/internal/execx"
+	"github.com/zzusec/reopen/internal/i18n"
 )
 
 func shell(script string) execx.Command {

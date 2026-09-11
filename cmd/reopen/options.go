@@ -5,17 +5,17 @@ import (
 	"io"
 	"strings"
 
-	"github.com/haowang02/agent-session-cleaner/internal/agent"
-	"github.com/haowang02/agent-session-cleaner/internal/buildinfo"
-	"github.com/haowang02/agent-session-cleaner/internal/i18n"
-	"github.com/haowang02/agent-session-cleaner/internal/tui/text"
+	"github.com/zzusec/reopen/internal/agent"
+	"github.com/zzusec/reopen/internal/buildinfo"
+	"github.com/zzusec/reopen/internal/i18n"
+	"github.com/zzusec/reopen/internal/tui/text"
 )
 
 // options is the command line, once it has been read.
 //
 // The parser is written out rather than taken from the standard library
 // because the standard one stops at the first positional argument, which would
-// make `agent-session-cleaner codex --codex-home DIR` silently ignore the
+// make `reopen codex --codex-home DIR` silently ignore the
 // directory. Every message here is ours to translate, too.
 type options struct {
 	agent   string

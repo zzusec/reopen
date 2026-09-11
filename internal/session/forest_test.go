@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/haowang02/agent-session-cleaner/internal/session"
+	"github.com/zzusec/reopen/internal/session"
 )
 
 // node builds a session with just the fields the tree cares about.

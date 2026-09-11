@@ -2,9 +2,9 @@
 
 set -eu
 
-repo="haowang02/agent-session-cleaner"
-binary="agent-session-cleaner"
-alias_name="asc"
+repo="zzusec/reopen"
+binary="reopen"
+alias_name="re"
 
 say() {
 	printf '%s\n' "$*"
@@ -30,18 +30,18 @@ case "$(uname -m)" in
 	*) fail "unsupported architecture: $(uname -m)" ;;
 esac
 
-version=${ASC_VERSION:-latest}
+version=${REOPEN_VERSION:-latest}
 case "$version" in
 	latest) release_path="latest/download" ;;
-	*[!A-Za-z0-9._-]*) fail "invalid ASC_VERSION: $version" ;;
+	*[!A-Za-z0-9._-]*) fail "invalid REOPEN_VERSION: $version" ;;
 	v*) release_path="download/$version" ;;
 	*) release_path="download/v$version" ;;
 esac
 
-if [ -n "${ASC_INSTALL_DIR:-}" ]; then
-	install_dir=$ASC_INSTALL_DIR
+if [ -n "${REOPEN_INSTALL_DIR:-}" ]; then
+	install_dir=$REOPEN_INSTALL_DIR
 else
-	[ -n "${HOME:-}" ] || fail "HOME is not set; set ASC_INSTALL_DIR explicitly"
+	[ -n "${HOME:-}" ] || fail "HOME is not set; set REOPEN_INSTALL_DIR explicitly"
 	install_dir=${XDG_BIN_HOME:-"$HOME/.local/bin"}
 fi
 case "$install_dir" in
@@ -51,7 +51,7 @@ esac
 
 asset="$binary-$platform-$arch.tar.gz"
 base_url="https://github.com/$repo/releases/$release_path"
-tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/agent-session-cleaner.XXXXXX") ||
+tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/reopen.XXXXXX") ||
 	fail "could not create a temporary directory"
 staged_file=""
 cleanup() {

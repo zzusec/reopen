@@ -9,10 +9,10 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/haowang02/agent-session-cleaner/internal/i18n"
-	"github.com/haowang02/agent-session-cleaner/internal/session"
-	"github.com/haowang02/agent-session-cleaner/internal/tui/text"
-	"github.com/haowang02/agent-session-cleaner/internal/tui/theme"
+	"github.com/zzusec/reopen/internal/i18n"
+	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/reopen/internal/tui/text"
+	"github.com/zzusec/reopen/internal/tui/theme"
 )
 
 func TestRowsShowTheTree(t *testing.T) {

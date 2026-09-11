@@ -1,4 +1,4 @@
-module github.com/haowang02/agent-session-cleaner
+module github.com/zzusec/reopen
 
 go 1.25.8
 

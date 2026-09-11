@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/haowang02/agent-session-cleaner/internal/execx"
-	"github.com/haowang02/agent-session-cleaner/internal/i18n"
+	"github.com/zzusec/reopen/internal/execx"
+	"github.com/zzusec/reopen/internal/i18n"
 )
 
 func commandShim(t *testing.T, extension, body string) string {

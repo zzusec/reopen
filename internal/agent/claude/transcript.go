@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/haowang02/agent-session-cleaner/internal/jsonl"
-	"github.com/haowang02/agent-session-cleaner/internal/session"
+	"github.com/zzusec/reopen/internal/jsonl"
+	"github.com/zzusec/reopen/internal/session"
 )
 
 // headScanLines bounds the search for the metadata preamble. cwd, version and

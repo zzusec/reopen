@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/haowang02/agent-session-cleaner/internal/agent"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/claude"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/codex"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/opencode"
-	"github.com/haowang02/agent-session-cleaner/internal/agent/pi"
-	"github.com/haowang02/agent-session-cleaner/internal/i18n"
+	"github.com/zzusec/reopen/internal/agent"
+	"github.com/zzusec/reopen/internal/agent/claude"
+	"github.com/zzusec/reopen/internal/agent/codex"
+	"github.com/zzusec/reopen/internal/agent/opencode"
+	"github.com/zzusec/reopen/internal/agent/pi"
+	"github.com/zzusec/reopen/internal/i18n"
 )
 
 // known is every agent this program manages, in the order the chooser lists

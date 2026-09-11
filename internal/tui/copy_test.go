@@ -3,7 +3,7 @@ package tui
 import (
 	"testing"
 
-	"github.com/haowang02/agent-session-cleaner/internal/session"
+	"github.com/zzusec/reopen/internal/session"
 )
 
 func TestCopySessionID(t *testing.T) {

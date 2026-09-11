@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/haowang02/agent-session-cleaner/internal/jsonl"
-	"github.com/haowang02/agent-session-cleaner/internal/session"
+	"github.com/zzusec/reopen/internal/jsonl"
+	"github.com/zzusec/reopen/internal/session"
 )
 
 // header is the first line of a session file, and the only line that is not
