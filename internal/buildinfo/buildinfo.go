@@ -6,4 +6,4 @@ const Name = "reopen"
 
 // Version is read by --version and checked against the release tag, so the
 // two can never drift apart.
-const Version = "0.8.1"
+const Version = "0.8.2"
