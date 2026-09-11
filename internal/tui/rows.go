@@ -3,6 +3,7 @@ package tui
 import (
 	"math"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -21,6 +22,7 @@ const (
 	projectMinWidth = 8
 	projectMaxWidth = 18
 	clockWidth      = 5
+	sizeWidth       = 6
 )
 
 func (m *Model) banner() string {
@@ -196,11 +198,12 @@ func (m *Model) rowLine(index int, day string, dayWidth, projectWidth, width int
 	// directory and within the same minute or two. Repeating all three columns
 	// on its row says nothing and buries the tree; the space goes to the title.
 	if row.Nested {
-		line.Space(dayWidth + 1 + clockWidth + 2 + projectWidth + 2)
+		line.Space(dayWidth + 1 + clockWidth + 2 + projectWidth + 1 + sizeWidth + 1)
 	} else {
 		line.Cell(day, dayWidth, shaded(m.theme.Day)).Space(1)
 		line.Cell(s.RecencyAt().Format("15:04"), clockWidth, shaded(m.theme.Clock)).Space(2)
-		line.Cell(projectOf(s), projectWidth, shaded(m.theme.Project)).Space(2)
+		line.Cell(projectOf(s), projectWidth, shaded(m.theme.Project)).Space(1)
+		line.Cell(formatBytes(s.Size), sizeWidth, shaded(m.theme.Project)).Space(1)
 	}
 
 	for _, guide := range row.Guides {
@@ -250,4 +253,52 @@ func projectOf(s session.Session) string {
 		return ""
 	}
 	return filepath.Base(s.Cwd)
+}
+
+// formatBytes renders a session's on-disk size as a right-aligned string that
+// fits in sizeWidth cells, so the unit suffixes line up in a column. Bigger
+// sessions cost more context when resumed, so the size is worth a glance in the
+// list: a 20 MB session will replay thousands of messages into the model, while
+// a 12 KB one barely registers.
+//
+// Units are binary (1024-based) because that matches what users see in a file
+// listing; B/KB/MB/GB read the same in either catalogue, so this needs no i18n.
+// One decimal is shown only when the integer part is a single digit — that keeps
+// "1.5MB" informative but never lets a column overflow (the largest form is
+// "1023KB", still four cells). The result is then left-padded to sizeWidth.
+func formatBytes(b int64) string {
+	const (
+		kb = 1 << 10
+		mb = 1 << 20
+		gb = 1 << 30
+	)
+	var body string
+	switch {
+	case b <= 0:
+		// An empty or missing transcript has no weight to show.
+		body = "—"
+	case b < kb:
+		body = strconv.FormatInt(b, 10) + "B"
+	case b < mb:
+		body = strconv.FormatInt(b/kb, 10) + "KB"
+	case b < gb:
+		body = scaled(float64(b)/mb, "MB")
+	default:
+		body = scaled(float64(b)/gb, "GB")
+	}
+	if gap := sizeWidth - text.Width(body); gap > 0 {
+		body = strings.Repeat(" ", gap) + body
+	}
+	return body
+}
+
+// scaled formats a value with a unit suffix, using one decimal only when the
+// integer part is a single digit (so 1.5MB but 20MB, never 1023.6MB).
+func scaled(value float64, unit string) string {
+	const oneDecimal = 10.0
+	formatted := strconv.FormatFloat(value, 'f', 0, 64)
+	if value < oneDecimal {
+		formatted = strings.TrimSuffix(strconv.FormatFloat(value, 'f', 1, 64), ".0")
+	}
+	return formatted + unit
 }
