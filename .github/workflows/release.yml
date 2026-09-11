@@ -1,0 +1,266 @@
+name: Release
+
+# A v-prefixed tag builds all six binaries and publishes a GitHub Release.
+# A manual run builds without publishing, which makes it useful as a dry run.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Format
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "gofmt would change:" >&2
+            echo "$unformatted" >&2
+            exit 1
+          fi
+
+      - name: Installer syntax
+        run: sh -n install.sh
+
+      - name: Vet
+        run: go vet ./...
+
+      # Pinned by go.mod's tool directive, so CI and a laptop run the same one.
+      - name: Staticcheck
+        run: go tool staticcheck ./...
+
+      # The runner has no agent installed and no session directories, which is
+      # the environment the suite is written to pass in.
+      - name: Test
+        run: go test ./...
+
+      - name: Verify tag and version
+        if: github.ref_type == 'tag'
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          built="$(sed -n 's/^const Version = "\(.*\)"$/\1/p' internal/buildinfo/buildinfo.go)"
+          if [ "$version" != "$built" ]; then
+            echo "tag version $version does not match the build's $built" >&2
+            exit 1
+          fi
+
+  check-windows:
+    name: Check Windows
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Windows installer syntax
+        shell: powershell
+        run: |
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path ./install.ps1), [ref]$tokens, [ref]$errors
+          ) | Out-Null
+          if ($errors.Count) {
+            $errors | ForEach-Object { Write-Error $_ }
+            exit 1
+          }
+
+      - name: Build
+        run: go build ./...
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Staticcheck
+        run: go tool staticcheck ./...
+
+      - name: Test
+        run: go test ./...
+
+  build:
+    name: Build
+    needs: [check, check-windows]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      # Everything cross-compiles from one runner: the SQLite driver is pure
+      # Go, so CGO stays off and the binaries are static. That also removes the
+      # glibc floor a dynamically linked build would impose on Linux users.
+      #
+      # -trimpath drops the build machine's paths, -s -w drop the symbol table
+      # and DWARF: together about a third off a plain build. Everything past
+      # that costs something real — a packer such as UPX breaks macOS
+      # signing on arm64 and reliably trips antivirus — so the rest of the
+      # saving is left to the archive, which is where a download is measured
+      # anyway.
+      - name: Build every platform
+        env:
+          CGO_ENABLED: "0"
+        run: |
+          set -euo pipefail
+          mkdir -p dist stage
+          for target in darwin/arm64 darwin/amd64 linux/amd64 linux/arm64 windows/amd64 windows/arm64; do
+            os="${target%/*}"
+            arch="${target#*/}"
+            case "$os/$arch" in
+              darwin/amd64|linux/amd64|windows/amd64) label="x86_64" ;;
+              *)                        label="$arch" ;;
+            esac
+            case "$os" in
+              darwin) platform="macos" ;;
+              *)      platform="$os" ;;
+            esac
+
+            name="agent-session-cleaner-$platform-$label"
+            mkdir -p "stage/$name"
+            executable="agent-session-cleaner"
+            [ "$os" != windows ] || executable="$executable.exe"
+            GOOS="$os" GOARCH="$arch" go build \
+              -trimpath -ldflags "-s -w" \
+              -o "stage/$name/$executable" ./cmd/agent-session-cleaner
+
+            # The executable and nothing else, unpacking into the working
+            # directory rather than into a directory of its own. Windows uses
+            # zip so PowerShell can unpack it without another dependency.
+            if [ "$os" = windows ]; then
+              (cd "stage/$name" && zip -9 "../../dist/$name.zip" "$executable")
+            else
+              tar -C "stage/$name" -cf - "$executable" \
+                | gzip -9 > "dist/$name.tar.gz"
+            fi
+          done
+          file stage/*/*
+          ls -lh dist
+
+      # Test what is actually published, unpacked the way a reader of the
+      # README would unpack it. A binary that cannot answer --version, or an
+      # archive that does not hold exactly one, is not worth releasing.
+      - name: Smoke-test the published archive
+        run: |
+          set -euo pipefail
+          mkdir -p check
+          tar -C check -xzf dist/agent-session-cleaner-linux-x86_64.tar.gz
+          if [ "$(ls -A check)" != "agent-session-cleaner" ]; then
+            echo "the archive holds more than the executable:" >&2
+            ls -A check >&2
+            exit 1
+          fi
+          ./check/agent-session-cleaner --version
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: binaries
+          path: |
+            dist/agent-session-cleaner-*.tar.gz
+            dist/agent-session-cleaner-*.zip
+          if-no-files-found: error
+
+  smoke-windows:
+    name: Smoke test Windows archive
+    needs: build
+    runs-on: windows-2025
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          name: binaries
+
+      - name: Smoke-test the published archive
+        shell: powershell
+        run: |
+          Expand-Archive -LiteralPath dist/agent-session-cleaner-windows-x86_64.zip -DestinationPath check
+          $files = @(Get-ChildItem -LiteralPath check -File -Recurse)
+          $check = (Resolve-Path check).Path
+          $expected = Join-Path $check "agent-session-cleaner.exe"
+          if ($files.Count -ne 1 -or $files[0].FullName -ine $expected) {
+            throw "the archive does not contain exactly one agent-session-cleaner.exe"
+          }
+          & $files[0].FullName --version
+
+  release:
+    name: Publish release
+    if: github.ref_type == 'tag'
+    needs: [build, smoke-windows]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          name: binaries
+
+      - name: Checksums
+        run: |
+          set -euo pipefail
+          cd dist
+          sha256sum agent-session-cleaner-*.tar.gz agent-session-cleaner-*.zip > checksums.txt
+          cat checksums.txt
+
+      - name: Prepare release notes
+        run: |
+          set -euo pipefail
+
+          describe=(--tags --abbrev=0)
+          case "$GITHUB_REF_NAME" in
+            *-*) ;;
+            *) describe+=(--exclude='*-*') ;;
+          esac
+          previous="$(git describe "${describe[@]}" "${GITHUB_REF_NAME}^" 2>/dev/null || true)"
+          range="$GITHUB_REF_NAME"
+          if [ -n "$previous" ]; then
+            range="$previous..$GITHUB_REF_NAME"
+          fi
+
+          {
+            echo '### Changelog'
+            git log "$range" \
+              --format="- %s ([%h]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/commit/%H))"
+          } > notes.md
+          cat notes.md
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # Hyphenated tags such as v0.4.1-rc1 are prereleases and do not
+          # replace the latest stable release.
+          case "$GITHUB_REF_NAME" in
+            *-*) kind=(--prerelease) ;;
+            *)   kind=(--latest) ;;
+          esac
+          # Asset filenames already describe their platforms; no display label
+          # is needed.
+          gh release create "$GITHUB_REF_NAME" \
+            "${kind[@]}" \
+            --verify-tag \
+            --title "$GITHUB_REF_NAME" \
+            --notes-file notes.md \
+            dist/*
