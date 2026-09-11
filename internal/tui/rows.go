@@ -236,9 +236,11 @@ func (m *Model) rowLine(index int, label string, dayWidth, projectWidth, width i
 	if row.Nested {
 		line.Space(dayWidth + 1 + clockWidth + 2 + projectWidth + 1 + sizeWidth + 1)
 	} else {
+		// The project leads: it tells the reader which workspace a row is in
+		// before the time it ran, which scans faster than the other way around.
 		line.Cell(label, dayWidth, shaded(m.theme.Day)).Space(1)
-		line.Cell(s.RecencyAt().Format("15:04"), clockWidth, shaded(m.theme.Clock)).Space(2)
-		line.Cell(projectOf(s), projectWidth, shaded(m.theme.Project)).Space(1)
+		line.Cell(projectOf(s), projectWidth, shaded(m.theme.Project)).Space(2)
+		line.Cell(s.RecencyAt().Format("15:04"), clockWidth, shaded(m.theme.Clock)).Space(1)
 		line.Cell(formatBytes(s.Size), sizeWidth, shaded(m.theme.Project)).Space(1)
 	}
 

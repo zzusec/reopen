@@ -41,6 +41,11 @@ func TestRowColumns(t *testing.T) {
 	if !strings.Contains(first, "12:00") || !strings.Contains(first, "app") {
 		t.Errorf("row = %q, want the time and project columns", first)
 	}
+	// The project leads the time: which workspace a row is in scans faster
+	// before the moment it ran than after.
+	if projectAt, timeAt := strings.Index(first, "app"), strings.Index(first, "12:00"); !(projectAt < timeAt) {
+		t.Errorf("project should come before time on a row: project@%d time@%d in %q", projectAt, timeAt, first)
+	}
 	if strings.Count(screen(m), "Yesterday") != 1 {
 		t.Errorf("the day was repeated on every row:\n%s", screen(m))
 	}
