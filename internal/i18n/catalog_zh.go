@@ -46,6 +46,7 @@ var chinese = map[Key]string{
 	BindingHelp:              "按键说明",
 	BindingQuit:              "退出",
 	BindingFocus:             "切换焦点",
+	BindingResume:            "恢复会话",
 
 	HelpTitle:          "按键说明",
 	HelpClose:          "按 Esc、q、h 或 Enter 关闭",
@@ -72,6 +73,7 @@ var chinese = map[Key]string{
 	HelpEscape:         "退出多选模式、关闭危险模式，或清除搜索",
 	HelpReload:         "刷新会话列表",
 	HelpOpen:           "显示按键说明",
+	HelpResume:         "恢复当前会话：加载历史记录，继续之前的任务",
 	HelpQuit:           "退出",
 
 	Cancel:                "取消",
@@ -155,6 +157,8 @@ var chinese = map[Key]string{
 	BulkProgress:            "{operation} {done}/{total}…",
 	BulkFailed:              "{operation} {done}/{total} 个会话，{remaining} 个未完成：{message}",
 	BulkDone:                "{operation} {count} 个{what}",
+	Resuming:                "正在恢复会话 {session_id}…",
+	ResumeEmpty:             "当前没有可恢复的会话。",
 
 	PickerTitle:       "会话清理",
 	PickerChoose:      "选择要管理的 Agent",
@@ -198,4 +202,6 @@ var chinese = map[Key]string{
 	CLIPiHome:             "Pi Agent 数据目录（默认：$PI_CODING_AGENT_DIR 或 ~/.pi/agent）",
 	CLIVersion:            "显示版本号并退出",
 	CLIHomeUnavailable:    "{agent} 会话数据目录不存在或不是目录：{path}",
+	CLINoBinary:           "未找到 {agent}，请确认已安装并位于 PATH 中：{error}",
+	CLIResumeUnsupported:  "暂不支持恢复 {agent} 的会话；仅 Claude Code 与 Codex 可直接恢复。",
 }

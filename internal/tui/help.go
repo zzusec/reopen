@@ -44,6 +44,7 @@ var helpSections = []helpSection{
 		{keys: "!", what: i18n.HelpDanger, gated: dangerAction},
 	}},
 	{name: i18n.HelpOther, entries: []helpEntry{
+		{keys: "↵", what: i18n.HelpResume, gated: resumeAction},
 		{keys: "Esc", what: i18n.HelpEscape},
 		{keys: "r", what: i18n.HelpReload},
 		{keys: "h", what: i18n.HelpOpen},

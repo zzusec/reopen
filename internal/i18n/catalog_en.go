@@ -46,6 +46,7 @@ var english = map[Key]string{
 	BindingHelp:              "Shortcuts",
 	BindingQuit:              "Quit",
 	BindingFocus:             "Switch focus",
+	BindingResume:            "Resume",
 
 	HelpTitle:          "Keyboard shortcuts",
 	HelpClose:          "Press Esc, q, h, or Enter to close",
@@ -72,6 +73,7 @@ var english = map[Key]string{
 	HelpEscape:         "Exit multi-select, turn off danger mode, or clear the search",
 	HelpReload:         "Refresh the session list",
 	HelpOpen:           "Show keyboard shortcuts",
+	HelpResume:         "Resume the session under the cursor and load its history",
 	HelpQuit:           "Quit",
 
 	Cancel:                "Cancel",
@@ -155,6 +157,8 @@ var english = map[Key]string{
 	BulkProgress:            "{operation} {done}/{total}…",
 	BulkFailed:              "{operation} {done}/{total}; {remaining} not completed: {message}",
 	BulkDone:                "{operation} {count} {what}",
+	Resuming:                "Resuming session {session_id}…",
+	ResumeEmpty:             "No session to resume.",
 
 	PickerTitle:       "Session Cleaner",
 	PickerChoose:      "Choose an agent",
@@ -198,4 +202,6 @@ var english = map[Key]string{
 	CLIPiHome:             "Pi agent data directory (default: $PI_CODING_AGENT_DIR or ~/.pi/agent)",
 	CLIVersion:            "show the version and exit",
 	CLIHomeUnavailable:    "{agent} session data directory is missing or is not a directory: {path}",
+	CLINoBinary:           "{agent} not found; is it installed and on your PATH? {error}",
+	CLIResumeUnsupported:  "Resuming {agent} sessions is not supported; only Claude Code and Codex can be resumed directly.",
 }

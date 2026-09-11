@@ -58,6 +58,7 @@ const (
 	BindingHelp
 	BindingQuit
 	BindingFocus
+	BindingResume
 
 	// The help screen.
 	HelpTitle
@@ -85,6 +86,7 @@ const (
 	HelpEscape
 	HelpReload
 	HelpOpen
+	HelpResume
 	HelpQuit
 
 	// Confirmation dialogs.
@@ -173,6 +175,8 @@ const (
 	BulkProgress
 	BulkFailed
 	BulkDone
+	Resuming
+	ResumeEmpty
 
 	// The agent chooser.
 	PickerTitle
@@ -219,6 +223,8 @@ const (
 	CLIPiHome
 	CLIVersion
 	CLIHomeUnavailable
+	CLINoBinary
+	CLIResumeUnsupported
 
 	// numKeys is the count of defined keys, for the catalogue completeness test.
 	numKeys

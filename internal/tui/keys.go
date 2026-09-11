@@ -29,6 +29,7 @@ const (
 	reloadAction
 	helpAction
 	quitAction
+	resumeAction
 
 	// Keys that need no footer entry.
 	searchBackAction
@@ -58,6 +59,7 @@ var bindings = []binding{
 	{keys: []string{"d"}, action: deleteAction, label: i18n.BindingDelete, picked: i18n.BindingDeleteSelected},
 	{keys: []string{"c"}, action: copySessionIDAction, label: i18n.BindingCopySessionID},
 	{keys: []string{"y"}, action: copyWorkingDirectoryAction, label: i18n.BindingCopyCwd},
+	{keys: []string{"enter"}, action: resumeAction, label: i18n.BindingResume},
 	// Shown as the open-box glyph: "space" spelled out is wider than the label
 	// it introduces, and reads as a word rather than a key.
 	{keys: []string{"space"}, display: "␣", action: pickAction, label: i18n.BindingSelect, picked: i18n.BindingSelectMore},
@@ -92,7 +94,7 @@ var (
 		sweepArchivedAction, sweepEmptyAction, sweepOrphansAction, dangerAction,
 	}
 	footerBottom = []action{
-		pickAction, searchAction, reloadAction, helpAction, quitAction,
+		resumeAction, pickAction, searchAction, reloadAction, helpAction, quitAction,
 	}
 )
 
@@ -181,8 +183,8 @@ func (m *Model) useful(a action) bool {
 	case copyWorkingDirectoryAction:
 		current, ok := m.current()
 		return ok && current.Cwd != ""
-	case deleteAction, copySessionIDAction, pickAction, searchAction:
-		// Nothing to delete, copy, pick out or search through.
+	case deleteAction, copySessionIDAction, pickAction, searchAction, resumeAction:
+		// Nothing to delete, copy, pick out, search through or resume.
 		return len(m.rows) > 0
 	}
 	return true

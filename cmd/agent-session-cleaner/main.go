@@ -65,8 +65,18 @@ func run(ctx context.Context, args []string, print *i18n.Printer, out, _ io.Writ
 		return err
 	}
 
-	_, err = tea.NewProgram(tui.New(ctx, target, print), tea.WithContext(ctx)).Run()
-	return err
+	model := tui.New(ctx, target, print)
+	if _, err = tea.NewProgram(model, tea.WithContext(ctx)).Run(); err != nil {
+		return err
+	}
+
+	// The user pressed Enter on a session: hand the terminal to the agent's
+	// own command line so the conversation loads and continues. Nothing in the
+	// browser runs after this — the process is replaced.
+	if picked, ok := model.Resume(); ok {
+		return resume(target, picked, print)
+	}
+	return nil
 }
 
 // choose opens the chooser and reports which agent the user settled on, or an

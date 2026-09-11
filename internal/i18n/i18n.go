@@ -139,7 +139,7 @@ func Detect(lookup func(string) string) string {
 			return English
 		}
 	}
-	return English
+	return Chinese
 }
 
 func normalize(value string) string {

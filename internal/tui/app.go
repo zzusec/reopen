@@ -99,6 +99,12 @@ type Model struct {
 	help   bool
 	// helpTop scrolls the help screen, which is taller than a short terminal.
 	helpTop int
+
+	// resume carries the session the user picked to resume, and resumeWanted
+	// says they pressed Enter to leave the browser for it. main() reads both
+	// once the program has quit, the way choose() reads picker.Model.Choice.
+	resume       session.Session
+	resumeWanted bool
 }
 
 func New(ctx context.Context, target agent.Agent, print *i18n.Printer) *Model {
@@ -270,6 +276,8 @@ func (m *Model) command(a action) tea.Cmd {
 		return m.reload()
 	case quitAction:
 		return m.quit()
+	case resumeAction:
+		return m.resumeSession()
 	case searchAction:
 		return m.beginSearch(1)
 	case searchBackAction:
@@ -330,6 +338,36 @@ func (m *Model) quit() tea.Cmd {
 		m.copyStop = nil
 	}
 	return tea.Quit
+}
+
+// resumeSession is what Enter does in the list: it remembers the session under
+// the cursor and quits, so main() can hand control to the agent's own command
+// line. Like quit, it refuses while a mutation is in flight — but for a
+// different reason: the listing under the cursor may be about to change.
+func (m *Model) resumeSession() tea.Cmd {
+	if m.busy {
+		m.warn(i18n.BusyCannotQuit)
+		return nil
+	}
+	s, ok := m.current()
+	if !ok {
+		m.warn(i18n.ResumeEmpty)
+		return nil
+	}
+	m.resume = s
+	m.resumeWanted = true
+	if m.copyStop != nil {
+		m.copyStop()
+		m.copyStop = nil
+	}
+	return tea.Quit
+}
+
+// Resume reports the session the user picked to resume, and whether they did.
+// main() reads it after the program has quit; the value is nil-safe through
+// resumeWanted being false.
+func (m *Model) Resume() (session.Session, bool) {
+	return m.resume, m.resumeWanted
 }
 
 func (m *Model) toggleDanger() tea.Cmd {

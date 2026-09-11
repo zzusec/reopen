@@ -124,7 +124,7 @@ func TestDetect(t *testing.T) {
 		env  map[string]string
 		want string
 	}{
-		{"nothing set", nil, English},
+		{"nothing set", nil, Chinese},
 		{"explicit override", map[string]string{LanguageEnv: "zh"}, Chinese},
 		{"override beats the locale", map[string]string{
 			LanguageEnv: "en", "LANG": "zh_CN.UTF-8",
