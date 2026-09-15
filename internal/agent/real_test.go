@@ -6,12 +6,12 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/zzusec/reopen/internal/agent"
-	"github.com/zzusec/reopen/internal/agent/claude"
-	"github.com/zzusec/reopen/internal/agent/codex"
-	"github.com/zzusec/reopen/internal/agent/opencode"
-	"github.com/zzusec/reopen/internal/agent/pi"
-	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/restore-session/internal/agent"
+	"github.com/zzusec/restore-session/internal/agent/claude"
+	"github.com/zzusec/restore-session/internal/agent/codex"
+	"github.com/zzusec/restore-session/internal/agent/opencode"
+	"github.com/zzusec/restore-session/internal/agent/pi"
+	"github.com/zzusec/restore-session/internal/session"
 )
 
 // These read the session trees on this machine, to prove the parsers cope with

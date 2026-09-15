@@ -12,11 +12,11 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/zzusec/reopen/internal/agent"
-	"github.com/zzusec/reopen/internal/agent/opencode"
-	"github.com/zzusec/reopen/internal/execx"
-	"github.com/zzusec/reopen/internal/i18n"
-	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/restore-session/internal/agent"
+	"github.com/zzusec/restore-session/internal/agent/opencode"
+	"github.com/zzusec/restore-session/internal/execx"
+	"github.com/zzusec/restore-session/internal/i18n"
+	"github.com/zzusec/restore-session/internal/session"
 )
 
 // The schema, reduced to the columns this program reads. OpenCode has added

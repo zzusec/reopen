@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/zzusec/reopen/internal/agent"
-	"github.com/zzusec/reopen/internal/agent/claude"
-	"github.com/zzusec/reopen/internal/agent/codex"
-	"github.com/zzusec/reopen/internal/agent/opencode"
-	"github.com/zzusec/reopen/internal/agent/pi"
-	"github.com/zzusec/reopen/internal/i18n"
+	"github.com/zzusec/restore-session/internal/agent"
+	"github.com/zzusec/restore-session/internal/agent/claude"
+	"github.com/zzusec/restore-session/internal/agent/codex"
+	"github.com/zzusec/restore-session/internal/agent/opencode"
+	"github.com/zzusec/restore-session/internal/agent/pi"
+	"github.com/zzusec/restore-session/internal/i18n"
 )
 
 // known is every agent this program manages, in the order the chooser lists

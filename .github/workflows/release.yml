@@ -133,13 +133,13 @@ jobs:
               *)      platform="$os" ;;
             esac
 
-            name="reopen-$platform-$label"
+            name="restore-session-$platform-$label"
             mkdir -p "stage/$name"
-            executable="reopen"
+            executable="restore-session"
             [ "$os" != windows ] || executable="$executable.exe"
             GOOS="$os" GOARCH="$arch" go build \
               -trimpath -ldflags "-s -w" \
-              -o "stage/$name/$executable" ./cmd/reopen
+              -o "stage/$name/$executable" ./cmd/restore-session
 
             # The executable and nothing else, unpacking into the working
             # directory rather than into a directory of its own. Windows uses
@@ -161,20 +161,20 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p check
-          tar -C check -xzf dist/reopen-linux-x86_64.tar.gz
-          if [ "$(ls -A check)" != "reopen" ]; then
+          tar -C check -xzf dist/restore-session-linux-x86_64.tar.gz
+          if [ "$(ls -A check)" != "restore-session" ]; then
             echo "the archive holds more than the executable:" >&2
             ls -A check >&2
             exit 1
           fi
-          ./check/reopen --version
+          ./check/restore-session --version
 
       - uses: actions/upload-artifact@v7
         with:
           name: binaries
           path: |
-            dist/reopen-*.tar.gz
-            dist/reopen-*.zip
+            dist/restore-session-*.tar.gz
+            dist/restore-session-*.zip
           if-no-files-found: error
 
   smoke-windows:
@@ -190,12 +190,12 @@ jobs:
       - name: Smoke-test the published archive
         shell: powershell
         run: |
-          Expand-Archive -LiteralPath dist/reopen-windows-x86_64.zip -DestinationPath check
+          Expand-Archive -LiteralPath dist/restore-session-windows-x86_64.zip -DestinationPath check
           $files = @(Get-ChildItem -LiteralPath check -File -Recurse)
           $check = (Resolve-Path check).Path
-          $expected = Join-Path $check "reopen.exe"
+          $expected = Join-Path $check "restore-session.exe"
           if ($files.Count -ne 1 -or $files[0].FullName -ine $expected) {
-            throw "the archive does not contain exactly one reopen.exe"
+            throw "the archive does not contain exactly one restore-session.exe"
           }
           & $files[0].FullName --version
 
@@ -220,7 +220,7 @@ jobs:
         run: |
           set -euo pipefail
           cd dist
-          sha256sum reopen-*.tar.gz reopen-*.zip > checksums.txt
+          sha256sum restore-session-*.tar.gz restore-session-*.zip > checksums.txt
           cat checksums.txt
 
       - name: Prepare release notes

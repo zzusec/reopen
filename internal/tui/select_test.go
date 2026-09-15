@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/zzusec/reopen/internal/tui/theme"
+	"github.com/zzusec/restore-session/internal/tui/theme"
 )
 
 // marked lists the rows showing the picked mark, which is the only claim the

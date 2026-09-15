@@ -37,9 +37,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/zzusec/reopen/internal/agent"
-	"github.com/zzusec/reopen/internal/i18n"
-	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/restore-session/internal/agent"
+	"github.com/zzusec/restore-session/internal/i18n"
+	"github.com/zzusec/restore-session/internal/session"
 )
 
 // Identity and layout.

@@ -14,7 +14,7 @@ import (
 
 	"charm.land/lipgloss/v2"
 
-	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/restore-session/internal/session"
 )
 
 // Palette is one Tokyo Night variant, named the way the upstream theme names

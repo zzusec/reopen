@@ -2,8 +2,8 @@
 
 set -eu
 
-repo="zzusec/reopen"
-binary="reopen"
+repo="zzusec/restore-session"
+binary="restore-session"
 alias_name="re"
 
 say() {
@@ -30,18 +30,18 @@ case "$(uname -m)" in
 	*) fail "unsupported architecture: $(uname -m)" ;;
 esac
 
-version=${REOPEN_VERSION:-latest}
+version=${RESTORE_SESSION_VERSION:-latest}
 case "$version" in
 	latest) release_path="latest/download" ;;
-	*[!A-Za-z0-9._-]*) fail "invalid REOPEN_VERSION: $version" ;;
+	*[!A-Za-z0-9._-]*) fail "invalid RESTORE_SESSION_VERSION: $version" ;;
 	v*) release_path="download/$version" ;;
 	*) release_path="download/v$version" ;;
 esac
 
-if [ -n "${REOPEN_INSTALL_DIR:-}" ]; then
-	install_dir=$REOPEN_INSTALL_DIR
+if [ -n "${RESTORE_SESSION_INSTALL_DIR:-}" ]; then
+	install_dir=$RESTORE_SESSION_INSTALL_DIR
 else
-	[ -n "${HOME:-}" ] || fail "HOME is not set; set REOPEN_INSTALL_DIR explicitly"
+	[ -n "${HOME:-}" ] || fail "HOME is not set; set RESTORE_SESSION_INSTALL_DIR explicitly"
 	install_dir=${XDG_BIN_HOME:-"$HOME/.local/bin"}
 fi
 case "$install_dir" in
@@ -51,7 +51,7 @@ esac
 
 asset="$binary-$platform-$arch.tar.gz"
 base_url="https://github.com/$repo/releases/$release_path"
-tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/reopen.XXXXXX") ||
+tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/restore-session.XXXXXX") ||
 	fail "could not create a temporary directory"
 staged_file=""
 cleanup() {

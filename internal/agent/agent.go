@@ -11,8 +11,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/zzusec/reopen/internal/i18n"
-	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/restore-session/internal/i18n"
+	"github.com/zzusec/restore-session/internal/session"
 )
 
 // Meta is everything the interface needs to know about an agent that does not

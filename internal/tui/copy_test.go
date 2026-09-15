@@ -3,7 +3,7 @@ package tui
 import (
 	"testing"
 
-	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/restore-session/internal/session"
 )
 
 func TestCopySessionID(t *testing.T) {

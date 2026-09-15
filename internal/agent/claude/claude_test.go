@@ -9,9 +9,9 @@ import (
 	"testing/fstest"
 	"time"
 
-	"github.com/zzusec/reopen/internal/agent"
-	"github.com/zzusec/reopen/internal/agent/claude"
-	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/restore-session/internal/agent"
+	"github.com/zzusec/restore-session/internal/agent/claude"
+	"github.com/zzusec/restore-session/internal/session"
 )
 
 func transcript(lines ...string) *fstest.MapFile {

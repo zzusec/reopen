@@ -1,4 +1,4 @@
-module github.com/zzusec/reopen
+module github.com/zzusec/restore-session
 
 go 1.25.8
 

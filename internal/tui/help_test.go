@@ -7,7 +7,7 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 
-	"github.com/zzusec/reopen/internal/i18n"
+	"github.com/zzusec/restore-session/internal/i18n"
 )
 
 func TestHelpOpensAndCloses(t *testing.T) {

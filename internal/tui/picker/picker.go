@@ -11,10 +11,10 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 
-	"github.com/zzusec/reopen/internal/agent"
-	"github.com/zzusec/reopen/internal/i18n"
-	"github.com/zzusec/reopen/internal/tui/text"
-	"github.com/zzusec/reopen/internal/tui/theme"
+	"github.com/zzusec/restore-session/internal/agent"
+	"github.com/zzusec/restore-session/internal/i18n"
+	"github.com/zzusec/restore-session/internal/tui/text"
+	"github.com/zzusec/restore-session/internal/tui/theme"
 )
 
 // wordmark is the tool's name in a block font, drawn in two weights: the solid

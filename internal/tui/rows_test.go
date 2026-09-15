@@ -3,7 +3,7 @@ package tui
 import (
 	"testing"
 
-	"github.com/zzusec/reopen/internal/tui/text"
+	"github.com/zzusec/restore-session/internal/tui/text"
 )
 
 // TestFormatBytes pins the list's size column: every output is exactly

@@ -121,7 +121,7 @@ func expand(template string, args Args) string {
 // LanguageEnv is the variable that overrides locale detection. ASC_LANG is
 // still honored for backwards compatibility with the upstream tool.
 const (
-	LanguageEnv    = "REOPEN_LANG"
+	LanguageEnv    = "RESTORE_SESSION_LANG"
 	languageEnvOld = "ASC_LANG"
 )
 

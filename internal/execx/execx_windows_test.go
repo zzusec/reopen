@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/zzusec/reopen/internal/execx"
-	"github.com/zzusec/reopen/internal/i18n"
+	"github.com/zzusec/restore-session/internal/execx"
+	"github.com/zzusec/restore-session/internal/i18n"
 )
 
 func commandShim(t *testing.T, extension, body string) string {

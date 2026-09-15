@@ -7,8 +7,8 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/zzusec/reopen/internal/i18n"
-	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/restore-session/internal/i18n"
+	"github.com/zzusec/restore-session/internal/session"
 )
 
 type opKind uint8

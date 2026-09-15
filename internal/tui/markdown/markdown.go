@@ -11,7 +11,7 @@ import (
 	"charm.land/glamour/v2"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/zzusec/reopen/internal/tui/theme"
+	"github.com/zzusec/restore-session/internal/tui/theme"
 )
 
 // Renderer turns Markdown into styled lines of a fixed width. A renderer is

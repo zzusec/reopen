@@ -3,8 +3,8 @@ package main
 import (
 	"testing"
 
-	"github.com/zzusec/reopen/internal/agent/claude"
-	"github.com/zzusec/reopen/internal/agent/codex"
+	"github.com/zzusec/restore-session/internal/agent/claude"
+	"github.com/zzusec/restore-session/internal/agent/codex"
 )
 
 // TestResumeCommand pins the command line each agent expects when one of its

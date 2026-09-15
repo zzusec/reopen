@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/restore-session/internal/session"
 )
 
 // node builds a session with just the fields the tree cares about.

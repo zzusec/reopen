@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/zzusec/reopen/internal/jsonl"
+	"github.com/zzusec/restore-session/internal/jsonl"
 )
 
 func collect(t *testing.T, r io.Reader) ([]string, *jsonl.Scanner) {

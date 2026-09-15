@@ -1,9 +1,9 @@
 <div align="center">
-  <h1>reopen</h1>
+  <h1>restore-session</h1>
   <p><strong>Browse your Codex, Claude Code, OpenCode, and Pi sessions from one terminal — and jump straight back into any of them with one key.</strong></p>
   <p>
-    <a href="https://github.com/zzusec/reopen/releases/latest"><img src="https://img.shields.io/github/v/release/zzusec/reopen?label=release" alt="Latest release"></a>
-    <a href="https://github.com/zzusec/reopen/actions/workflows/ci.yml"><img src="https://github.com/zzusec/reopen/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+    <a href="https://github.com/zzusec/restore-session/releases/latest"><img src="https://img.shields.io/github/v/release/zzusec/restore-session?label=release" alt="Latest release"></a>
+    <a href="https://github.com/zzusec/restore-session/actions/workflows/ci.yml"><img src="https://github.com/zzusec/restore-session/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
     <img src="https://img.shields.io/badge/platforms-macOS%20%7C%20Linux%20%7C%20Windows-blue" alt="Platforms: macOS, Linux, and Windows">
     <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
   </p>
@@ -12,9 +12,9 @@
 
 > **Fork notice &amp; acknowledgements**
 >
-> `reopen` is a fork of [**agent-session-cleaner**](https://github.com/haowang02/agent-session-cleaner) by [**Hao Wang (haowang02)**](https://github.com/haowang02). All of the session browsing, search, cleanup, and archiving machinery is his work — this project would not exist without it. 🙏
+> `restore-session` is a fork of [**agent-session-cleaner**](https://github.com/haowang02/agent-session-cleaner) by [**Hao Wang (haowang02)**](https://github.com/haowang02). All of the session browsing, search, cleanup, and archiving machinery is his work — this project would not exist without it. 🙏
 >
-> The one thing `reopen` adds is a **one-key resume**: highlight a session in the browser, press `Enter`, and the current process is replaced by `claude --resume <id>` / `codex resume <id>`, loading that session's full history so you can pick up exactly where you left off. This was born from the built-in `/resume` picker rendering unreliably under a third-party provider.
+> The one thing `restore-session` adds is a **one-key resume**: highlight a session in the browser, press `Enter`, and the current process is replaced by `claude --resume <id>` / `codex resume <id>`, loading that session's full history so you can pick up exactly where you left off. This was born from the built-in `/resume` picker rendering unreliably under a third-party provider.
 >
 > Licensed under the MIT License, with the original copyright notice retained.
 
@@ -25,40 +25,40 @@
 Install or update on macOS and Linux:
 
 ```bash
-curl -LsSf https://raw.githubusercontent.com/zzusec/reopen/main/install.sh | sh
+curl -LsSf https://raw.githubusercontent.com/zzusec/restore-session/main/install.sh | sh
 ```
 
 Install or update on Windows from PowerShell:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -c "irm https://raw.githubusercontent.com/zzusec/reopen/main/install.ps1 | iex"
+powershell -ExecutionPolicy Bypass -c "irm https://raw.githubusercontent.com/zzusec/restore-session/main/install.ps1 | iex"
 ```
 
-The installer installs `reopen` and creates a short `re` alias pointing at it. On Windows it adds `%LOCALAPPDATA%\Programs\reopen\bin` to your user `PATH`. Open a new terminal after the first install.
+The installer installs `restore-session` and creates a short `re` alias pointing at it. On Windows it adds `%LOCALAPPDATA%\Programs\restore-session\bin` to your user `PATH`. Open a new terminal after the first install.
 
 ## Usage
 
 ```bash
-reopen
+restore-session
 # The short alias `re` is also available (re codex, re claude, ...).
 ```
 
 Run without arguments to choose an agent, or name one directly:
 
 ```bash
-reopen codex
-reopen claude
-reopen opencode
-reopen pi
+restore-session codex
+restore-session claude
+restore-session opencode
+restore-session pi
 ```
 
 By default, the app uses `$CODEX_HOME` or `~/.codex` for Codex, `$CLAUDE_CONFIG_DIR` or `~/.claude` for Claude Code, `$XDG_DATA_HOME/opencode` or `~/.local/share/opencode` for OpenCode, and `$PI_CODING_AGENT_DIR` or `~/.pi/agent` for Pi. On Windows, `~` is your user profile directory. To override a location explicitly:
 
 ```bash
-reopen --codex-home /path/to/codex
-reopen --claude-home /path/to/claude
-reopen --opencode-home /path/to/opencode
-reopen --pi-home /path/to/pi/agent
+restore-session --codex-home /path/to/codex
+restore-session --claude-home /path/to/claude
+restore-session --opencode-home /path/to/opencode
+restore-session --pi-home /path/to/pi/agent
 ```
 
 The OpenCode path must name the `opencode` data directory itself, not its parent. The `opencode.db` file, when present, lives directly inside it.
@@ -70,11 +70,11 @@ Session discovery and previews read the stored data directly. Codex changes and 
 The interface follows your locale (`LC_ALL`, `LC_MESSAGES`, `LANGUAGE`, or `LANG`). Chinese locales use Simplified Chinese; all other locales use English. To override detection:
 
 ```bash
-REOPEN_LANG=en reopen
-REOPEN_LANG=zh-CN reopen
+RESTORE_SESSION_LANG=en restore-session
+RESTORE_SESSION_LANG=zh-CN restore-session
 ```
 
-In PowerShell, use `$env:REOPEN_LANG = "zh-CN"` before running `reopen`.
+In PowerShell, use `$env:RESTORE_SESSION_LANG = "zh-CN"` before running `restore-session`.
 
 ## Keyboard shortcuts
 
@@ -108,10 +108,10 @@ Press Space or double-click to select or deselect a session. Selecting a session
 
 ## Resume a session (one key)
 
-This is what `reopen` is for. Move the cursor to any Claude Code or Codex session and press `Enter`: the current process is replaced by the agent resuming that session, with its full history loaded so you can continue right away.
+This is what `restore-session` is for. Move the cursor to any Claude Code or Codex session and press `Enter`: the current process is replaced by the agent resuming that session, with its full history loaded so you can continue right away.
 
 ```bash
-reopen claude      # browse Claude Code sessions, press Enter to resume
+restore-session claude      # browse Claude Code sessions, press Enter to resume
 re codex           # same, for Codex (the `re` alias is identical)
 ```
 
@@ -121,7 +121,7 @@ re codex           # same, for Codex (the `re` alias is identical)
 | Codex | `Enter` | `codex resume <session-id>` takes over the terminal |
 | OpenCode / Pi | `c` then paste | resume via their CLI (Enter is browse-only here) |
 
-If the agent binary is missing from your `PATH`, `reopen` prints a message and exits instead of failing.
+If the agent binary is missing from your `PATH`, `restore-session` prints a message and exits instead of failing.
 
 ## Deletion and archiving
 
@@ -137,5 +137,5 @@ If the agent binary is missing from your `PATH`, `reopen` prints a message and e
 
 ## Acknowledgements
 
-- [**agent-session-cleaner**](https://github.com/haowang02/agent-session-cleaner) by [Hao Wang (haowang02)](https://github.com/haowang02) — `reopen` is a fork of this project. The session browsing, search, cleanup, and archiving features are entirely his work. Thank you.
+- [**agent-session-cleaner**](https://github.com/haowang02/agent-session-cleaner) by [Hao Wang (haowang02)](https://github.com/haowang02) — `restore-session` is a fork of this project. The session browsing, search, cleanup, and archiving features are entirely his work. Thank you.
 - [LINUX DO](https://linux.do/) — a community for builders and curious minds (credited by the upstream project)

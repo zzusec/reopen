@@ -18,7 +18,7 @@ import (
 
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/zzusec/reopen/internal/i18n"
+	"github.com/zzusec/restore-session/internal/i18n"
 )
 
 // DefaultTimeout bounds one invocation. An agent that has not answered by then

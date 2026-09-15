@@ -10,9 +10,9 @@ import (
 	"testing/fstest"
 	"time"
 
-	"github.com/zzusec/reopen/internal/agent"
-	"github.com/zzusec/reopen/internal/agent/pi"
-	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/restore-session/internal/agent"
+	"github.com/zzusec/restore-session/internal/agent/pi"
+	"github.com/zzusec/restore-session/internal/session"
 )
 
 // The directory name encodes the working directory by turning its separators

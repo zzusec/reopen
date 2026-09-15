@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zzusec/reopen/internal/jsonl"
-	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/restore-session/internal/jsonl"
+	"github.com/zzusec/restore-session/internal/session"
 )
 
 // header is the first line of a session file, and the only line that is not

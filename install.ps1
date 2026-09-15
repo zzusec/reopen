@@ -1,12 +1,12 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-$Repository = "zzusec/reopen"
-$Binary = "reopen"
+$Repository = "zzusec/restore-session"
+$Binary = "restore-session"
 $Alias = "re"
 
 function Fail([string]$Message) {
-    throw "reopen installer: $Message"
+    throw "restore-session installer: $Message"
 }
 
 if (-not [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform(
@@ -20,25 +20,25 @@ switch ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToSt
     default { Fail "unsupported architecture: $($_)" }
 }
 
-$Version = if ($env:REOPEN_VERSION) { $env:REOPEN_VERSION } else { "latest" }
+$Version = if ($env:RESTORE_SESSION_VERSION) { $env:RESTORE_SESSION_VERSION } else { "latest" }
 if ($Version -eq "latest") {
     $ReleasePath = "latest/download"
 } else {
     if ($Version -notmatch '^[A-Za-z0-9._-]+$') {
-        Fail "invalid REOPEN_VERSION: $Version"
+        Fail "invalid RESTORE_SESSION_VERSION: $Version"
     }
     $Tag = if ($Version.StartsWith("v")) { $Version } else { "v$Version" }
     $ReleasePath = "download/$Tag"
 }
 
-if ($env:REOPEN_INSTALL_DIR) {
-    $InstallDirectory = $env:REOPEN_INSTALL_DIR
+if ($env:RESTORE_SESSION_INSTALL_DIR) {
+    $InstallDirectory = $env:RESTORE_SESSION_INSTALL_DIR
 } else {
     $LocalAppData = [Environment]::GetFolderPath([Environment+SpecialFolder]::LocalApplicationData)
     if (-not $LocalAppData) {
-        Fail "the local application data directory is unavailable; set REOPEN_INSTALL_DIR explicitly"
+        Fail "the local application data directory is unavailable; set RESTORE_SESSION_INSTALL_DIR explicitly"
     }
-    $InstallDirectory = Join-Path $LocalAppData "Programs\reopen\bin"
+    $InstallDirectory = Join-Path $LocalAppData "Programs\restore-session\bin"
 }
 if (-not [IO.Path]::IsPathRooted($InstallDirectory)) {
     Fail "the install directory must be an absolute path: $InstallDirectory"
@@ -47,7 +47,7 @@ $InstallDirectory = [IO.Path]::GetFullPath($InstallDirectory)
 
 $Asset = "$Binary-windows-$Architecture.zip"
 $BaseUrl = "https://github.com/$Repository/releases/$ReleasePath"
-$TemporaryDirectory = Join-Path ([IO.Path]::GetTempPath()) ("reopen." + [guid]::NewGuid().ToString("N"))
+$TemporaryDirectory = Join-Path ([IO.Path]::GetTempPath()) ("restore-session." + [guid]::NewGuid().ToString("N"))
 $Archive = Join-Path $TemporaryDirectory $Asset
 $Checksums = Join-Path $TemporaryDirectory "checksums.txt"
 $ExtractDirectory = Join-Path $TemporaryDirectory "extract"
@@ -141,7 +141,7 @@ try {
     $Staged = $null
 
     $AliasPath = Join-Path $InstallDirectory "$Alias.cmd"
-    $AliasMarker = "rem Managed by the reopen installer"
+    $AliasMarker = "rem Managed by the restore-session installer"
     $AliasContents = "@echo off`r`n$AliasMarker`r`n`"%~dp0$ExecutableName`" %*`r`n"
     $ResolvedAlias = Get-Command $Alias -ErrorAction SilentlyContinue
     $ManageAlias = -not $ResolvedAlias

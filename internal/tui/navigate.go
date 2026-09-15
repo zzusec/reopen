@@ -5,7 +5,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/zzusec/reopen/internal/i18n"
+	"github.com/zzusec/restore-session/internal/i18n"
 )
 
 // Layout constants, in terminal cells.

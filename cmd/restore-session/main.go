@@ -1,4 +1,4 @@
-// Command reopen browses, resumes and cleans up Codex,
+// Command restore-session browses, resumes and cleans up Codex,
 // Claude Code, OpenCode, and Pi session history.
 package main
 
@@ -13,11 +13,11 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/zzusec/reopen/internal/agent"
-	"github.com/zzusec/reopen/internal/buildinfo"
-	"github.com/zzusec/reopen/internal/i18n"
-	"github.com/zzusec/reopen/internal/tui"
-	"github.com/zzusec/reopen/internal/tui/picker"
+	"github.com/zzusec/restore-session/internal/agent"
+	"github.com/zzusec/restore-session/internal/buildinfo"
+	"github.com/zzusec/restore-session/internal/i18n"
+	"github.com/zzusec/restore-session/internal/tui"
+	"github.com/zzusec/restore-session/internal/tui/picker"
 )
 
 func main() {

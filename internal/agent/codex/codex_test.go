@@ -7,10 +7,10 @@ import (
 	"testing/fstest"
 	"time"
 
-	"github.com/zzusec/reopen/internal/agent"
-	"github.com/zzusec/reopen/internal/agent/codex"
-	"github.com/zzusec/reopen/internal/execx"
-	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/restore-session/internal/agent"
+	"github.com/zzusec/restore-session/internal/agent/codex"
+	"github.com/zzusec/restore-session/internal/execx"
+	"github.com/zzusec/restore-session/internal/session"
 )
 
 // rollout assembles a transcript from its lines.

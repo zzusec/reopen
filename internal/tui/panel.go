@@ -5,11 +5,11 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/zzusec/reopen/internal/agent"
-	"github.com/zzusec/reopen/internal/i18n"
-	"github.com/zzusec/reopen/internal/session"
-	"github.com/zzusec/reopen/internal/tui/markdown"
-	"github.com/zzusec/reopen/internal/tui/text"
+	"github.com/zzusec/restore-session/internal/agent"
+	"github.com/zzusec/restore-session/internal/i18n"
+	"github.com/zzusec/restore-session/internal/session"
+	"github.com/zzusec/restore-session/internal/tui/markdown"
+	"github.com/zzusec/restore-session/internal/tui/text"
 )
 
 // bodyKey identifies one rendering of one conversation. Markdown has to be

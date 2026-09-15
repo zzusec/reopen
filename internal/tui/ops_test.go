@@ -8,8 +8,8 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 
-	"github.com/zzusec/reopen/internal/session"
-	"github.com/zzusec/reopen/internal/tui/text"
+	"github.com/zzusec/restore-session/internal/session"
+	"github.com/zzusec/restore-session/internal/tui/text"
 )
 
 // A side thread exists only because of the conversation that spawned it, so it

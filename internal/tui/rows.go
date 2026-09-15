@@ -9,10 +9,10 @@ import (
 
 	"charm.land/lipgloss/v2"
 
-	"github.com/zzusec/reopen/internal/i18n"
-	"github.com/zzusec/reopen/internal/session"
-	"github.com/zzusec/reopen/internal/tui/text"
-	"github.com/zzusec/reopen/internal/tui/theme"
+	"github.com/zzusec/restore-session/internal/i18n"
+	"github.com/zzusec/restore-session/internal/session"
+	"github.com/zzusec/restore-session/internal/tui/text"
+	"github.com/zzusec/restore-session/internal/tui/theme"
 )
 
 // Column widths, in cells. The date and project columns size themselves to the

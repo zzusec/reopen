@@ -3,7 +3,7 @@ package session_test
 import (
 	"testing"
 
-	"github.com/zzusec/reopen/internal/session"
+	"github.com/zzusec/restore-session/internal/session"
 )
 
 // family is a conversation with two sub-agents, one of which spawned a third.
